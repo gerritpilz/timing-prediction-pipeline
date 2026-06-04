@@ -10,7 +10,7 @@ from single_gat import GAT_model_single
 #-----------hyperparameters------------
 
 batch_size = 2    # chose small batch size as graphs when using large designs as data
-d_embd     = 128
+d_embd     = 100
 n_heads    = 6
 n_layers   = 6
 dropout    = 0.1
