@@ -7,7 +7,7 @@ import os
 import json
 
 #-----------hyperparameters------------
-batch_size = 3
+batch_size = 2
 d_embd     = 64
 n_heads    = 4
 n_layers   = 4
@@ -16,7 +16,7 @@ dropout    = 0.1
 lr         = 1e-3
 n_epochs   = 100
 eval_iter  = 10
-n_eval_batches = 5
+n_eval_batches = 4
 val_split  = 0.8
 
 #--------------------------------------
