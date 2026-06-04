@@ -7,7 +7,7 @@ import os
 import json
 
 #-----------hyperparameters------------
-batch_size = 32
+batch_size = 4
 d_embd     = 128
 n_heads    = 4
 n_layers   = 4
