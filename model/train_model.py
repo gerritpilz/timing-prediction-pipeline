@@ -12,7 +12,7 @@ from single_gat import GAT_model_single
 batch_size = 2    # chose small batch size as graphs when using large designs as data
 d_embd     = 64
 n_heads    = 4
-n_layers   = 6
+n_layers   = 4
 dropout    = 0.1
 
 lr         = 1e-3
