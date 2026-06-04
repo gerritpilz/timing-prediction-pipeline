@@ -102,12 +102,12 @@ def estimate_loss():
             losses.append(loss.item())
 
             # relative error
-            rel_error = torch.abs(pred[mask] - batch.y[mask]) / torch.abs(batch.y[mask])
-            rel_errors.append(rel_error.mean(dim=0)[1])  # slack error
+            abs_error = torch.abs(pred[mask] - batch.y[mask])
+            rel_errors.append(abs_error.mean(dim=0)[1])  # slack error
 
         out[split] = {
             'loss': sum(losses) / len(losses),
-            'rel_error': torch.stack(rel_errors).mean(dim=0)  # avg over batches
+            'abs_error_crit': torch.stack(rel_errors).mean(dim=0)  # avg over batches
         }
 
     model.train()
