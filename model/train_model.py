@@ -70,24 +70,43 @@ criterion = nn.MSELoss()
 
 @torch.no_grad()
 def estimate_loss():
+
     model.eval()
     out = {}
 
     for split, loader in [('train', train_loader), ('val', val_loader)]:
 
         losses = []
+        rel_errors = []
 
         for it, batch in enumerate(loader):
             if it == n_eval_batches:
                 break
 
             batch = batch.to(device)
-            pred = model(batch.x, batch.edge_index, batch.edge_attr, batch.clk_period, batch.batch)
+
+            pred = model(
+                batch.x,
+                batch.edge_index,
+                batch.edge_attr,
+                batch.clk_period,
+                batch.batch
+            )
 
             mask = ~torch.isinf(batch.y).any(dim=-1)
-            losses.append(criterion(pred[mask], batch.y[mask]).item())
 
-        out[split] = sum(losses) / len(losses)
+            # loss
+            loss = criterion(pred[mask], batch.y[mask])
+            losses.append(loss.item())
+
+            # relative error
+            rel_error = torch.abs(pred[mask] - batch.y[mask]) / (torch.abs(batch.y[mask]) + eps)
+            rel_errors.append(rel_error.mean(dim=0))  # per target
+
+        out[split] = {
+            'loss': sum(losses) / len(losses),
+            'rel_error': torch.stack(rel_errors).mean(dim=0)  # avg over batches
+        }
 
     model.train()
     return out
