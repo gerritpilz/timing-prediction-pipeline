@@ -8,7 +8,7 @@ import json
 
 #-----------hyperparameters------------
 
-batch_size = 2    # chose small batch size as graphs when using large designs as data
+batch_size = 1    # chose small batch size as graphs when using large designs as data
 d_embd     = 128
 n_heads    = 4
 n_layers   = 4
