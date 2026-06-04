@@ -6,14 +6,16 @@ The project transforms RTL designs into graph-based representations and learns t
 
 ## Pipeline Summary
 
-The full workflow consists of four main stages:
-
 ### 1. Design Compilation (SiliconCompiler)
 
 Verilog designs with arbitrary SDC constraints are parsed and synthesized using SiliconCompiler, producing an OpenDB (ODB) representation of the circuit for downstream processing. 
 Multiple clock speeds and operating points can be sampled to improve robustness across different timing scenarios.
 
-### 2. Feature Extraction (OpenROAD + Tcl)
+### 2. Liberty Parsing
+
+The Liberty file is parsed to extract pin capacitance and cell drive strength. In addition, a cell to index mapping is created.
+
+### 3. Feature Extraction (OpenROAD + Tcl)
 
 Using OpenROAD scripts, per-pin features are extracted from the ODB database:
 
@@ -24,11 +26,7 @@ Using OpenROAD scripts, per-pin features are extracted from the ODB database:
 - clock pin indicators  
 - cell type 
 
-### 2.2 Liberty Parsing
-
-The Liberty file is parsed to extract pin capacitance and cell drive strength. In addition, a cell to index mapping is created.
-
-### 3. Dataset Construction (Graph Generation)
+### 4. Dataset Construction (Graph Generation)
 
 A dataset builder merges all extracted information into a graph representation of the design, where:
 
@@ -50,23 +48,20 @@ A dataset builder merges all extracted information into a graph representation o
   - rise/fall max slew
   - 
 - edge attribute:
-  -inter/inter cell edge
+  - intra-cell / inter-cell 
   
 - clock period
 
 The resulting graphs are converted into PyTorch Geometric (.pt) format for training.
 
-### 4. Model Training (BiGAT / GAT)
+### 5. Model Training (BiGAT / GAT)
 
-A bi-directional graph attention network (BiGAT) is trained on the constructed graphs to learn pre-routing timing relationships in digital circuits.
+A bi-directional graph attention network (BiGAT) is trained on the constructed graphs to learn pre-routing timing relationships in digital circuits. 
 
 The model performs node-level prediction of:
 - timing slack  
 - criticality scores  
 - signal slew characteristics  
 
-Attention mechanisms capture both local (intra-cell) and global (inter-cell) dependencies in the netlist graph.
+## How to Use
 
-## Goal
-
-The goal of ChipGAT is to provide a machine learning surrogate for pre-routing static timing analysis, enabling early identification of timing-critical paths directly from circuit topology before placement and routing.
