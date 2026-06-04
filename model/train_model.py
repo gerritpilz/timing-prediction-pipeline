@@ -10,7 +10,7 @@ import json
 
 batch_size = 2    # chose small batch size as graphs when using large designs as data
 d_embd     = 64
-n_heads    = 6
+n_heads    = 4
 n_layers   = 6
 dropout    = 0.1
 
