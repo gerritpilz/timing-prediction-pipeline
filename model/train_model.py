@@ -133,7 +133,7 @@ for epoch in range(n_epochs):
             losses = estimate_loss()
 
             print(f"train loss: {losses['train']['loss']:.4f} | val loss: {losses['val']['loss']:.4f}")
-            print(f"val rel error (%): {(losses['val']['abs_error'] * 100).cpu().numpy()}")
+            print(f"val abs error crit error (%): {(losses['val']['abs_error_crit'] * 100).cpu().numpy()}")
             print("")
 
     torch.cuda.empty_cache()
