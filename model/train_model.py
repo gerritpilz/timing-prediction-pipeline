@@ -8,7 +8,7 @@ import json
 
 #-----------hyperparameters------------
 batch_size = 3
-d_embd     = 128
+d_embd     = 64
 n_heads    = 4
 n_layers   = 4
 dropout    = 0.1
