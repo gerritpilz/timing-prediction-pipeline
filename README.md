@@ -71,9 +71,13 @@ It serves as the primary target for identifying timing-critical regions of the d
 
 ### 2. Design Compilation
 
+
+
 ```tcl
-create_clock -name clk -period 10.0 [get_ports clk]
+create_clock -name clk -period <clock period> [get_ports <clock name in top module>]
 ```
+
+
 -period: set clock period (ns)
 [get_ports clk]: must match clock name in top module
 
