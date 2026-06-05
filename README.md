@@ -67,6 +67,18 @@ It serves as the primary target for identifying timing-critical regions of the d
 ### 6. Pedeicion 
 
 ## How to Use
+### 1. Setup
+
+### 2. Design Compilation
+
+For each design that should be part of the dataset, put all verilog files in a directory. A generic sdc file is already included at Dataset/lib_sdc . Note that in the first line, 
+
+python3 Dataset/chip_run.py \
+  --rtl Dataset/Designs/slowfil/rtl/*.v \
+  --sdc Dataset/lib_sdc/clk10.sdc \
+  --clk_period 10 \
+  --design slowfil \
+  --top_module slowfil
 
 
 
