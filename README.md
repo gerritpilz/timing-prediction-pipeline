@@ -64,5 +64,9 @@ The model performs node-level prediction of the minimal slack, the maximum rise/
 The criticality is computed as exp(-8 * (min slack / clk period)), which maps timing slack to a risk metric that increases as the available timing margin decreases. 
 It serves as the primary target for identifying timing-critical regions of the design and prioritizing pins with the highest likelihood of timing violations.
 
+### 6. Pedeicion 
+
 ## How to Use
+
+
 
