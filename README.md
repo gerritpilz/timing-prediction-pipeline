@@ -71,10 +71,9 @@ It serves as the primary target for identifying timing-critical regions of the d
 
 ### 2. Design Compilation
 
-All paths are relative to the repository root.
+All paths are relative to the repository root. A generic sdc file is already included at Dataset/lib_sdc. 
 
-For each design that should be part of the dataset, put all its Rtl files in a directory. 
-A generic sdc file is already included at Dataset/lib_sdc . 
+For each design that should be part of the dataset, put all its RTL files in a directory and repeat the following steps outlined in the Design Compilation paragraph. 
 
 First, define the target clock in the SDC file:
 
@@ -85,10 +84,10 @@ create_clock -name clk -period 10 [get_ports clk]
 where `clk` is the clock input of the top-level module and the period is specified in nanoseconds. Note that the pipeline also supports sampling different clock periods for the same design.
 
 
-Next, run the chip_run.py file:
+Next, run the crun_chip.py file:
 
 ```bash
-python dataset/chip_run.py \
+python dataset/run_chip.py \
   --rtl <rtl_files> \
   --sdc <clk.sdc> \
   --clk_period <clock_period_ns> \
@@ -99,7 +98,7 @@ python dataset/chip_run.py \
 Example:
 
 ```bash
-python3 dataset/chip_run.py \
+python3 dataset/run_chip.py \
   --rtl dataset/designs/aes/rtl/*.v \
   --sdc dataset/lib_sdc/generic_clk.sdc \
   --clk_period 10 \
@@ -107,7 +106,11 @@ python3 dataset/chip_run.py \
   --top_module aes
 ```
 
+If executed the first time, a new build direcory in the project directory is created, with the first desing in it. The following parsed desings can also be found in the build directory. 
+
 ### 3. Liberty Parsing
+
+This step creates three cell dictionarys in the dataset/lib_scd/ directory.
 
 ```bash
 python dataset/lib_scd/parse_lib.py \
@@ -119,13 +122,60 @@ Example:
 ```bash
 python dataset/lib_scd/parse_lib.py \
   --lib build/aes_10/job0/synthesis/0/inputs/sc_sky130hd_sky130_fd_sc_hd__ss_n40C_1v40.lib
+```
 
-This creates three cell dictionarys.
+### 4. Feature Extraction with OpenROAD
+
+This step generates a pin_features_dir/ directory in the project root, where each design is stored as a separate CSV file containing the extracted pin-level features.
+
+```bash
+python dataset/run_openroad.py \
+  --build_dir <path_to_build_directory> \
+  --tcl <path_to_export_per_node_tcl> \
+  --tech_lef <path>
+  --cell_lef <path>
+  --liberty <path_to_liberty_file>
+```
+
+Example:
+
+```bash
+python dataset/run_openroad.py \
+  --build_dir build \
+  --tcl dataset/export_per_node.tcl \
+  --tech_lef ~/.sc/cache/lambdapdk-v0.2.12-7b36460386694c92/lambdapdk/sky130/base/apr/sky130_fd_sc.tlef \
+  --cell_lef ~/.sc/cache/lambdapdk-v0.2.12-7b36460386694c92/lambdapdk/sky130/libs/sky130hd/lef/sky130_fd_sc_hd_merged.lef \
+  --liberty build/aes_10/job0/synthesis/0/inputs/sc_sky130hd_sky130_fd_sc_hd__ss_n40C_1v40.lib
+```
+
+### 5. Dataset Construction
+
+This step produces a pyg_datasets/ directory, which contains the final PyTorch Geometric (.pt) graph files ready for training.
+
+```bash
+python dataset/create_dataset.py \
+  --build_dir <path> \
+  --pin_features_dir <path> \
+  --cell_pin_direction <path> \
+  --cell_pin_cap <path> \
+  --cell_drive_strength <path> \
+  --cell_to_idx <path>
+```
+
+The pin_features_dir/ was created in step 4 (OpenROAD), the cell dictionarys in step 3 (Liberty Parsing).
 
 
+Example: 
 
-
-
+```bash
+python dataset/create_dataset.py \
+  --build_dir build \
+  --pin_features_dir pin_features_dir \
+  --cell_pin_direction dataset/lib_sdc/cell_pin_direction.json \
+  --cell_pin_cap dataset/lib_sdc/cell_pin_cap.json \
+  --cell_drive_strength dataset/lib_sdc/cell_drive_strength.json\
+  --cell_to_idx dataset/lib_sdc/cell_to_idx.json
+```
 
 
 
