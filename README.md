@@ -15,6 +15,7 @@ Multiple clock speeds and operating points can be sampled to improve robustness 
 
 The Liberty file is parsed to extract pin capacitance and cell drive strength. In addition, a cell to index mapping is created.
 
+
 ### 3. Feature Extraction (OpenROAD + Tcl)
 
 Using OpenROAD scripts, per-pin features are extracted from the ODB database:
@@ -24,7 +25,8 @@ Using OpenROAD scripts, per-pin features are extracted from the ODB database:
 - max rise/fall slew 
 - fanout 
 - clock pin indicators  
-- cell type 
+- cell type
+
 
 ### 4. Dataset Construction (Graph Generation)
 
@@ -54,6 +56,7 @@ A dataset builder merges all extracted information into a graph representation o
 
 The resulting graphs are converted into PyTorch Geometric (.pt) format for training.
 
+
 ### 5. Model Training (BiGAT)
 
 A bi-directional graph attention network (BiGAT) is trained on the constructed graphs to learn pre-routing timing relationships in digital circuits. 
@@ -65,6 +68,7 @@ The criticality is computed as exp(-8 * (min slack / clk period)), which maps ti
 It serves as the primary target for identifying timing-critical regions of the design and prioritizing pins with the highest likelihood of timing violations.
 
 ### 6. Prediction
+
 
 ## How to Use
 ### 1. Setup
@@ -88,6 +92,7 @@ It serves as the primary target for identifying timing-critical regions of the d
    ```bash
    openroad -version
    ```
+   
    
 ### 2. Design Compilation
 
@@ -128,6 +133,7 @@ python3 dataset/run_chip.py \
       
 If executed the first time, a new build directory in the project directory is created, with the first design in it. The following parsed designs can also be found in the build directory. 
 
+
 ### 3. Liberty Parsing
 
 This step generates three cell dictionary files in Dataset/lib_sdc/cell_dicts/, storing pin direction, pin capacitance, and cell drive strength extracted from the Liberty file.
@@ -143,6 +149,7 @@ Example:
 python dataset/lib_scd/parse_lib.py \
   --lib build/aes_10/job0/synthesis/0/inputs/sc_sky130hd_sky130_fd_sc_hd__ss_n40C_1v40.lib
 ```
+
 
 ### 4. Feature Extraction with OpenROAD
 
@@ -167,6 +174,7 @@ python dataset/run_openroad.py \
   --cell_lef ~/.sc/cache/lambdapdk-v0.2.12-7b36460386694c92/lambdapdk/sky130/libs/sky130hd/lef/sky130_fd_sc_hd_merged.lef \
   --liberty build/aes_10/job0/synthesis/0/inputs/sc_sky130hd_sky130_fd_sc_hd__ss_n40C_1v40.lib
 ```
+
 
 ### 5. Dataset Construction
 
@@ -198,6 +206,7 @@ python dataset/create_dataset.py \
   --cell_to_idx dataset/lib_sdc/cell_dicts/cell_to_idx.json
 ```
 
+
 ### 6. Model Training
 
 In this step, the model is trained on the previously created PyTorch Geometric (.pt) graph files. After the specified number of epochs, the trained model is saved in the checkpoints/ directory. During training, the current training and validation loss, as well as the absolute error of the criticality prediction, are printed to the terminal.
@@ -221,6 +230,7 @@ python model/model_train.py \
   --different_clk_periods
 ```
 
+
 ### 7. Timing Prediction
 
 In this step, a previously parsed digital design (stored as a PyTorch Geometric .pt graph) is passed to the trained BiGAT model to generate per-pin timing predictions. The model outputs node-level estimates for slack, rise/fall slew, and slack-derived criticality, which are automatically written to a CSV file in a default results/ directory.
@@ -240,6 +250,7 @@ python predict.py \
   --checkpoint checkpoints/model.pt \
   --pyg_graph aes.pt
 ```
+
 
 ## Results
 
