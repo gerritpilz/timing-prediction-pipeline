@@ -70,15 +70,20 @@ It serves as the primary target for identifying timing-critical regions of the d
 ### 1. Setup
 
 1. Clone Repository
+   
    ```bash
   git clone <repo_url>
   cd ChipGAT
    ```
+
 2. Install Dependencies
+
   ```bash
   pip install -r requirements.txt
   ```
+
 3. Install OpenROAD (Required)
+   
   This project requires a working OpenROAD installation, as it is used for feature extraction and netlist processing.
 
   Please install OpenROAD following the official instructions:
