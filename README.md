@@ -91,7 +91,7 @@ It serves as the primary target for identifying timing-critical regions of the d
    
 ### 2. Design Compilation
 
-    All paths are relative to the repository root. A generic sdc file is already included at Dataset/lib_sdc. 
+All paths are relative to the repository root. A generic sdc file is already included at Dataset/lib_sdc. 
       
 For each design that should be part of the dataset, put all its RTL files in a directory and repeat the following steps outlined in the Design   Compilation paragraph. 
       
