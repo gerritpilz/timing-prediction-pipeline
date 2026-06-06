@@ -17,6 +17,18 @@ class MLP(nn.Module):
         h = self.ffwd(x)
         return h + x
 
+class embed_mlp(nn.Module):
+    def __init__(self, d_embd, d_hidden):
+        super().__init__()
+        self.ffwd = nn.Sequential(
+            nn.Linear(1, d_hidden),
+            nn.GELU(),
+            nn.Linear(d_hidden, d_embd)
+        )
+    def forward(self, x):
+        h = self.ffwd(x)
+        return h
+
 
 class BiGATLayer(nn.Module):
     def __init__(self, d_embd, n_heads, dropout):
@@ -47,15 +59,13 @@ class GAT_model(nn.Module):
         super().__init__()
         self.clks = clks
 
-        self.cell_embedding = nn.Embedding(n_cells, d_embd)
-        self.input_proj = nn.Linear(n_features-1, d_embd)   # cell_id has separate embedding
+        self.cell_embed = nn.Embedding(n_cells, d_embd)
+        self.input_proj = nn.Linear(n_features-2, d_embd)   # cell_id, cell_strength have separate embedding
+
+        self.strength_embed = embed_mlp(d_embd, 32)
 
         if clks:
-            self.clk_embd = nn.Sequential(
-                nn.Linear(1, 8),
-                nn.ReLU(),
-                nn.Linear(8, d_embd)
-            )
+            self.clk_embed = embed_mlp(d_embd, 8)
 
         # GAT layers
         self.layers = nn.ModuleList([
@@ -73,13 +83,18 @@ class GAT_model(nn.Module):
 
         # embed
         cell_id = x[:, 0].long()
-        features = x[:, 1:]
-        h = self.input_proj(features) + self.cell_embedding(cell_id)
+        cell_drive_strength = x[:, 1]
+        features = x[:, 2:]
+
+        h = (self.input_proj(features)
+             + self.cell_embed(cell_id)
+             + self.strength_embed(cell_drive_strength)
+             )
 
         if self.clks:
 
-            clk_embd = self.clk_embd(clk_period[:, None])   # (G) -> (G C); G=number of graphs in batch
-            clk_node = clk_embd[batch_idx] # (G C) -> (N C); batch_idx maps node to graph
+            clk_embed = self.clk_embed(clk_period[:, None])   # (G) -> (G C); G=number of graphs in batch
+            clk_node = clk_embed[batch_idx] # (G C) -> (N C); batch_idx maps node to graph
             h = h + clk_node
 
 

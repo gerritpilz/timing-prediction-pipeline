@@ -5,21 +5,20 @@ from GAT_model import GAT_model
 import argparse
 import os
 import json
-from single_gat import GAT_model_single
 
 #-----------hyperparameters------------
 
 batch_size = 2    # chose small batch size as graphs when using large designs as data
-d_embd     = 64
-n_heads    = 4
-n_layers   = 4
-dropout    = 0.1
+d_embd = 64
+n_heads = 4
+n_layers = 4
+dropout = 0.1
 
-lr         = 1e-3
-n_epochs   = 100
-eval_iter  = 4
+lr = 1e-3
+n_epochs = 100
+eval_iter = 4
 n_eval_batches = 4
-val_split  = 0.8
+val_split = 0.8
 
 #--------------------------------------
 
@@ -137,6 +136,8 @@ for epoch in range(n_epochs):
             print("")
 
     torch.cuda.empty_cache()
+
+os.makedirs('checkpoints', exist_ok=True)
 
 torch.save({
     'model_state': model.state_dict(),
