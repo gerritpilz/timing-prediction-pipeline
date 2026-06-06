@@ -191,7 +191,7 @@ python dataset/create_dataset.py \
   --cell_to_idx <path>
 ```
 
-The pin_features_dir/ was created in step 4 (OpenROAD), the cell dictionaries in step 3 (Liberty Parsing).
+The 'pin_features_dir/' was created in step 4 (OpenROAD), the cell dictionaries in step 3 (Liberty Parsing).
 
 
 Example: 
@@ -209,10 +209,10 @@ python dataset/create_dataset.py \
 
 ### 6. Model Training
 
-In this step, the model is trained on the previously created PyTorch Geometric (.pt) graph files. After the specified number of epochs, the trained model is saved in the checkpoints/ directory. During training, the current training and validation loss, as well as the absolute error of the criticality prediction, are printed to the terminal.
+In this step, the model is trained on the previously created PyTorch Geometric (.pt) graph files. After the specified number of epochs, the trained model is saved in the 'checkpoints/' directory. During training, the current training and validation loss, as well as the absolute error of the criticality prediction, are printed to the terminal.
 
 Hyperparameters are defined at the top of `model_train.py` and can be modified directly in the script.
-If different clock periods were used for at least one design, the --different_clk_periods flag should be enabled.
+If different clock periods were used for at least one design, the '--different_clk_periods' flag should be enabled.
 
 ```bash
 python model/model_train.py \
@@ -233,7 +233,7 @@ python model/model_train.py \
 
 ### 7. Timing Prediction
 
-In this step, a previously parsed digital design (stored as a PyTorch Geometric .pt graph) is passed to the trained BiGAT model to generate per-pin timing predictions. The model outputs node-level estimates for slack, rise/fall slew, and slack-derived criticality, which are automatically written to a CSV file in a default results/ directory.
+In this step, a previously parsed digital design (stored as a PyTorch Geometric .pt graph) is passed to the trained BiGAT model to generate per-pin timing predictions. The model outputs node-level estimates for slack, rise/fall slew, and slack-derived criticality, which are automatically written to a CSV file in a default 'results/' directory.
 
 ```bash
 python predict.py \
