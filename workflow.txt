@@ -1,0 +1,87 @@
+project.run()
+
+Schritt 2 – ODB entpacken
+cp build/gcd/job0/place.detailed/0/inputs/gcd.odb.gz /tmp/
+cd /tmp && gunzip -f gcd.odb.gz
+
+Schritt 3 – TCL ausführen
+cd /mnt/c/Users/gerri/Desktop/Projekte/AI/ChipGAT
+sed -i 's/\r//' export_per_node.tcl
+openroad -exit export_per_node.tcl
+
+sed -i 's/\r//' export_per_node.tcl   # entfernt leerzeichen
+openroad -exit export_per_node.tcl
+
+
+
+
+
+
+multiclk suggestions
+additional features:
+
+
+node_features = [
+clk_period,
+  clk_id
+]
+
+edge_features = [
+  is_cdc   # if inp - cell - outp of filopflop but inp has different clk than outp
+]
+
+
+
+
+
+# commands
+
+# chip_run
+python3 Dataset/chip_run.py \
+  --rtl Dataset/Designs/slowfil/rtl/*.v \
+  --sdc Dataset/lib_sdc/clk10.sdc \
+  --clk_period 10 \
+  --design slowfil \
+  --top_module slowfil
+
+
+
+  # design name + top module (look into .v to see igf topmodule has right name)
+
+  # check topmodule verilog for clk name -> adapt sdc accordingly
+
+
+python3 Dataset/run_openroad.py \
+  --build_dir build2 \
+  --tcl Dataset/export_per_node.tcl \
+  --tech_lef ~/.sc/cache/lambdapdk-v0.2.12-7b36460386694c92/lambdapdk/sky130/base/apr/sky130_fd_sc.tlef \
+  --cell_lef ~/.sc/cache/lambdapdk-v0.2.12-7b36460386694c92/lambdapdk/sky130/libs/sky130hd/lef/sky130_fd_sc_hd_merged.lef \
+  --liberty build/picorv32/job0/synthesis/0/inputs/sc_sky130hd_sky130_fd_sc_hd__ss_n40C_1v40.lib
+# run_openroad
+
+
+# create dataset
+python3 Dataset/create_dataset.py \
+  --build_dir build \
+  --pin_features_dir pin_features_dir \
+  --cell_pin_direction Dataset/lib_sdc/cell_pin_direction.json \
+  --cell_pin_cap Dataset/lib_sdc/cell_pin_cap.json \
+  --cell_drive_strength \
+  --cell_to_idx Dataset/lib_sdc/cell_to_idx.json
+
+
+
+in sdc change:      create_clock -name clk -period 10.0 [get_ports ->clk_i<-]
+
+  terminal: strg a; strg e; strg b; strg f
+
+
+
+ data
+ # https://github.com/secworks/aes
+
+git pull --rebase origin main
+
+git stash
+git pull --rebase origin main
+git stash pop
