@@ -106,25 +106,25 @@ where `clk` is the clock input of the top-level module and the period is specifi
       
 Next, run the run_chip.py file:
       
-   ```bash
-      python dataset/run_chip.py \
-        --rtl <rtl_files> \
-        --sdc <clk.sdc> \
-        --clk_period <clock_period_ns> \
-        --design <design_name> \
-        --top_module <top_module>
-   ```
+```bash
+python dataset/run_chip.py \
+ --rtl <rtl_files> \
+ --sdc <clk.sdc> \
+ --clk_period <clock_period_ns> \
+ --design <design_name> \
+ --top_module <top_module>
+```
       
-   Example:
+Example:
       
-    ```bash
-    python3 dataset/run_chip.py \
-      --rtl dataset/designs/aes/rtl/*.v \
-      --sdc dataset/lib_sdc/generic_clk.sdc \
-      --clk_period 10 \
-      --design aes \
-      --top_module aes
-     ```
+```bash
+python3 dataset/run_chip.py \
+ --rtl dataset/designs/aes/rtl/*.v \
+ --sdc dataset/lib_sdc/generic_clk.sdc \
+ --clk_period 10 \
+ --design aes \
+ --top_module aes
+```
       
 If executed the first time, a new build directory in the project directory is created, with the first design in it. The following parsed designs can also be found in the build directory. 
 
