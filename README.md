@@ -79,6 +79,7 @@ It serves as the primary target for identifying timing-critical regions of the d
    pip install -r requirements.txt
    ```
 3. Install OpenROAD (Required)
+
    This project requires a working OpenROAD installation, as it is used for feature extraction and netlist processing. 
    Please install OpenROAD following the official instructions:
    https://github.com/The-OpenROAD-Project/OpenROAD
