@@ -69,6 +69,26 @@ It serves as the primary target for identifying timing-critical regions of the d
 ## How to Use
 ### 1. Setup
 
+1. Clone Repository
+   ```bash
+  git clone <repo_url>
+  cd ChipGAT
+   ```
+2. Install Dependencies
+  ```bash
+  pip install -r requirements.txt
+  ```
+3. Install OpenROAD (Required)
+  This project requires a working OpenROAD installation, as it is used for feature extraction and netlist processing.
+
+  Please install OpenROAD following the official instructions:
+  https://github.com/The-OpenROAD-Project/OpenROAD
+
+  After installation, ensure that OpenROAD is accessible from the command line:
+  ```bash
+  openroad -version
+  ```
+
 ### 2. Design Compilation
 
 All paths are relative to the repository root. A generic sdc file is already included at Dataset/lib_sdc. 
