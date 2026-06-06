@@ -91,42 +91,42 @@ It serves as the primary target for identifying timing-critical regions of the d
    
 ### 2. Design Compilation
 
-All paths are relative to the repository root. A generic sdc file is already included at Dataset/lib_sdc. 
-
-For each design that should be part of the dataset, put all its RTL files in a directory and repeat the following steps outlined in the Design Compilation paragraph. 
-
-First, define the target clock in the SDC file:
-
-```tcl
-create_clock -name clk -period 10 [get_ports clk]
-```
-
-where `clk` is the clock input of the top-level module and the period is specified in nanoseconds. Note that the pipeline also supports sampling different clock periods for the same design.
-
-
-Next, run the run_chip.py file:
-
-```bash
-python dataset/run_chip.py \
-  --rtl <rtl_files> \
-  --sdc <clk.sdc> \
-  --clk_period <clock_period_ns> \
-  --design <design_name> \
-  --top_module <top_module>
-```
-
-Example:
-
-```bash
-python3 dataset/run_chip.py \
-  --rtl dataset/designs/aes/rtl/*.v \
-  --sdc dataset/lib_sdc/generic_clk.sdc \
-  --clk_period 10 \
-  --design aes \
-  --top_module aes
-```
-
-If executed the first time, a new build directory in the project directory is created, with the first design in it. The following parsed designs can also be found in the build directory. 
+  All paths are relative to the repository root. A generic sdc file is already included at Dataset/lib_sdc. 
+  
+  For each design that should be part of the dataset, put all its RTL files in a directory and repeat the following steps outlined in the Design Compilation paragraph. 
+  
+  First, define the target clock in the SDC file:
+  
+  ```tcl
+  create_clock -name clk -period 10 [get_ports clk]
+  ```
+  
+  where `clk` is the clock input of the top-level module and the period is specified in nanoseconds. Note that the pipeline also supports sampling different clock periods for the same design.
+  
+  
+  Next, run the run_chip.py file:
+  
+  ```bash
+  python dataset/run_chip.py \
+    --rtl <rtl_files> \
+    --sdc <clk.sdc> \
+    --clk_period <clock_period_ns> \
+    --design <design_name> \
+    --top_module <top_module>
+  ```
+  
+  Example:
+  
+  ```bash
+  python3 dataset/run_chip.py \
+    --rtl dataset/designs/aes/rtl/*.v \
+    --sdc dataset/lib_sdc/generic_clk.sdc \
+    --clk_period 10 \
+    --design aes \
+    --top_module aes
+  ```
+  
+  If executed the first time, a new build directory in the project directory is created, with the first design in it. The following parsed designs can also be found in the build directory. 
 
 ### 3. Liberty Parsing
 
