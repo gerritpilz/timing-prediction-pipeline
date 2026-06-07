@@ -253,18 +253,21 @@ python predict.py \
 
 ## Results
 
-All metrics evaluated on held-out designs not seen during training.
+The proposed BiGAT model predicts pin-level timing metrics (slack, slew, and criticality) directly from pre-routing synthesized netlists.
+On evaluated benchmark designs, the model achieves:
 
 ### Prediction Accuracy
 | Metric             | Value     |
 |--------------------|-----------|
-| Slack MAE          | ~0.17 ns  |
-| Slew MAE           | ~0.21 ns  |
-| Criticality MAE    | ~X        |
-| Val Loss (BiGAT)   | ~X        |
-| Val Loss (GAT)     | ~X (+5%)  |
+| Slack MAE          | ~0.05 ns  |
+| Slew MAE           | ~0.11 ns  |
+| Criticality MAE    | ~0.04        |
+| Val Loss (BiGAT)   | ~0.067        |
+| Val Loss (GAT)     | ~0.073 (+9%)  |
 
-Slack and slew are reported in nanoseconds. Criticality is a normalized score ∈ [0,1], where 1 indicates a timing-critical pin (slack ≈ 0) and 0 indicates a non-critical pin.
+Criticality is a normalized score ∈ [0,1] derived from slack as exp(-8·slack/T), where T is the clock period — 
+approaching 1 for near-critical pins and 0 for non-critical pins. Criticality 
+is weighted 5× in the training loss to emphasize timing-critical paths.
 
 ### Runtime
 | Method          | Runtime      |
@@ -272,11 +275,61 @@ Slack and slew are reported in nanoseconds. Criticality is a normalized score �
 | Full P&R + STA  | 15–40 min    |
 | This model      | ~10 ms       |
 
-### Evaluation Designs
-Evaluated on 9 synthesized netlists: AES, ChaCha, GCD, IIRavg, PicoRV32, SHA256, Slowfil, SPI, UART.
+## Benchmark Designs
 
+The dataset covers 10 open-source synthesized netlists of varying complexity:
 
+| Design      | Description                  |
+|-------------|------------------------------|
+| aes         | AES encryption core          |
+| chacha      | ChaCha stream cipher         |
+| gcd         | GCD compute unit             |
+| ibex_core   | RISC-V CPU core              |
+| iiravg      | IIR filter                   |
+| picorv32    | RISC-V CPU (PicoRV32)        |
+| sha256      | SHA-256 hash core            |
+| slowfil     | Slow filter                  |
+| spi         | SPI controller               |
+| uart        | UART controller              |
 
+Synthesized netlists and extracted features are provided in `examples/netlists/` and `examples/features/`.
+
+## Provided Artifacts
+
+|
+ Artifact                  
+|
+ Location                   
+|
+|
+---------------------------
+|
+----------------------------
+|
+|
+ Synthesized netlists      
+|
+`examples/designs/`
+|
+|
+ Extracted pin features    
+|
+`examples/pin_features_dict/`
+|
+ Liberty cell dictionaries 
+|
+`examples/cell_dicts/`
+|
+|
+ PyG graph datasets        
+|
+`examples/pyg_datasets/`
+|
+|
+ Pretrained BiGAT checkpoint 
+|
+`examples/checkpoints/`
+|
 
 
 
