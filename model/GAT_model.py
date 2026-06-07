@@ -88,7 +88,7 @@ class GAT_model(nn.Module):
 
         h = (self.input_proj(features)
              + self.cell_embed(cell_id)
-             + self.strength_embed(cell_drive_strength)
+             + self.strength_embed(cell_drive_strength.unsqueeze(-1))
              )
 
         if self.clks:
