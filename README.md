@@ -69,6 +69,9 @@ It serves as the primary target for identifying timing-critical regions of the d
 
 ### 6. Prediction
 
+Given a synthesized netlist, the pipeline extracts pin features, constructs a 
+PyG graph, and predicts per-pin slack, slew, and timing criticality in ~10ms 
+without requiring Place & Route.
 
 ## How to Use
 ### 1. Setup
