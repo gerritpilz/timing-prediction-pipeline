@@ -123,7 +123,7 @@ python dataset/run_chip.py \
 Example:
       
 ```bash
-python3 dataset/run_chip.py \
+python dataset/run_chip.py \
  --rtl dataset/designs/aes/rtl/*.v \
  --sdc dataset/lib_sdc/generic_clk.sdc \
  --clk_period 10 \
