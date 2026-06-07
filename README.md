@@ -292,13 +292,13 @@ The dataset covers 10 open-source synthesized netlists of varying complexity:
 | spi         | SPI controller               |
 | uart        | UART controller              |
 
-Synthesized netlists and extracted features are provided in `examples/netlists/` and `examples/features/`.
+The corresponding PyG graph datasets are provided in `examples/pyg_datasets/`.
 
 ## Provided Artifacts
 
 | Artifact                    | Location                       |
 |-----------------------------|--------------------------------|
-| Synthesized netlists        | `examples/designs/`            |
+| RTL files of designs        | `examples/designs/`            |
 | Extracted pin features      | `examples/pin_features_dict/`  |
 | Liberty cell dictionaries   | `examples/cell_dicts/`         |
 | PyG graph datasets          | `examples/pyg_datasets/`       |
