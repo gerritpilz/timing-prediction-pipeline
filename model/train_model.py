@@ -165,7 +165,7 @@ if __name__ == "__main__":
                 losses = estimate_loss()
 
                 print(f"train loss: {losses['train']['loss']:.4f} | val loss: {losses['val']['loss']:.4f}")
-                print(f"val crit slack MAE: {losses['val']['crit_slack_mae']}")
+                print(f"val crit slack MAE: {losses['val']['crit_mae']}")
                 print(f"val slack MAE: {losses['val']['slack_mae']}")
                 print(f"val slew MAE: {losses['val']['slew_mae']}")
                 print("")
