@@ -54,4 +54,5 @@ foreach pin [get_pins -hierarchical *] {
     puts $fp "$pin_id,$cell_type,$direction,$is_clk,$fanout,$slack_min,$slew_r,$slew_f"
 }
 
+puts "CSV generation successful: ${outdir}/pin_features_${design_clk}.csv"
 close $fp

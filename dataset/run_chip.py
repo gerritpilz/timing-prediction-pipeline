@@ -31,7 +31,6 @@ if __name__ == "__main__":
 
     skywater130_demo(project)
 
-    project.option.add_to("place.detailed", clobber=True)
     project.run()
 
 

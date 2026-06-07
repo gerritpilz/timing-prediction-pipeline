@@ -17,6 +17,9 @@ def get_clk_period(path):
             if match:
                 return float(match.group(1))
 
+def normalize(s):
+    return s.replace("\\", "").strip()   # remove spaces in front/end of line, remove '\'
+
 
 if __name__ == "__main__":
 
@@ -71,11 +74,8 @@ if __name__ == "__main__":
         cell_inputs = {}  # cell -> [input pins]
         cell_outputs = {} # cell -> [output pins]
 
-        def normalize(s):
-            return s.replace("\\", "").strip()   # remove spaces in front/end of line, remove '\'
-
         # parse verilog
-        verilog_path = os.path.join(args.build_dir, f"{design_clk}/job0/place.detailed/0/outputs/{design}.vg")
+        verilog_path = os.path.join(args.build_dir, f"{design_clk}/job0/write.views/0/outputs/{design}.vg")
 
         if not os.path.exists(verilog_path):
             print(f"Skipping {design}, missing verilog")
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                         # add props
                         G.nodes[pin_id]['pin'] = pin
                         G.nodes[pin_id]['cell_id'] = cell_to_idx[cell_type]
-                        G.nodes[pin_id]['cell_strength'] = cell_drive_strength[cell_type]
+                        G.nodes[pin_id]['cell_strength'] = float(cell_drive_strength[cell_type])
                         G.nodes[pin_id]['pin_cap'] = cell_pin_cap[cell_type][pin]
                         direction = cell_pin_direction[cell_type][pin]
 
@@ -190,7 +190,7 @@ if __name__ == "__main__":
 
         # ---------add features-----------
 
-        sdc_path = os.path.join(args.build_dir, f"{design_clk}/job0/place.detailed/0/outputs/{design}.sdc")
+        sdc_path = os.path.join(args.build_dir, f"{design_clk}/job0/write.views/0/outputs/{design}.sdc")
 
         if not os.path.exists(sdc_path):
             print(f"Skipping {design}, missing sdc")
@@ -270,7 +270,7 @@ if __name__ == "__main__":
             x.append([
                 # get extra embedding later, first two attributes
                 data.get('cell_id'),
-                math.log2(data.get('cell_strength')),
+                data.get('cell_strength'),
 
                 # pin features
                 data.get('direction'),
@@ -284,9 +284,9 @@ if __name__ == "__main__":
             # target
             y.append([
                 data.get('slack_min_norm'),
-                data.get('criticality'),
                 data.get('slew_r'),
-                data.get('slew_f')
+                data.get('slew_f'),
+                data.get('criticality')
             ])
 
         # edges
@@ -334,7 +334,7 @@ if __name__ == "__main__":
 
         # features
         logging.info(f"cell_id              min/max: {dataset.x[:, 0].min():.0f} / {dataset.x[:, 0].max():.0f}")
-        logging.info(f"log2(drive_strength) min/max: {dataset.x[:, 1].min():.0f} / {dataset.x[:, 0].max():.0f}")
+        logging.info(f"cell_drive_strength  min/max: {dataset.x[:, 1].min():.0f} / {dataset.x[:, 0].max():.0f}")
         logging.info(f"direction            unique:  {dataset.x[:, 2].unique().tolist()}")
         logging.info(f"log1p(fanout)        min/max: {dataset.x[:, 3].min():.0f} / {dataset.x[:, 2].max():.0f}")
         logging.info(f"input_depth          max:     {dataset.x[:, 4].max():.0f}")

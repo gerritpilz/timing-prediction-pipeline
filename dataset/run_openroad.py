@@ -72,10 +72,10 @@ if __name__ == "__main__":
     for design_clk in os.listdir(args.build_dir):
 
         # set paths
-        design = design_clk.split("_")[0]
+        design = design_clk.rsplit("_", 1)[0]
 
-        odb_path_raw = os.path.join(args.build_dir, f"{design_clk}/job0/place.detailed/0/outputs/{design}.odb.gz")
-        sdc_path = os.path.join(args.build_dir, f"{design_clk}/job0/place.detailed/0/inputs/{design}.sdc")
+        odb_path_raw = os.path.join(args.build_dir, f"{design_clk}/job0/write.views/0/outputs/{design}.odb.gz")
+        sdc_path = os.path.join(args.build_dir, f"{design_clk}/job0/write.views/0/inputs/{design}.sdc")
 
         # invalid paths
         if not os.path.exists(odb_path_raw) or not os.path.exists(sdc_path):
@@ -99,6 +99,8 @@ if __name__ == "__main__":
         finally:
             if odb_path != odb_path_raw:
                 os.remove(odb_path)
+
+
 
 
 
