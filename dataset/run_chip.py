@@ -1,4 +1,3 @@
-from glob import glob
 from multiprocessing import freeze_support
 from siliconcompiler import ASIC, Design
 from siliconcompiler.targets import skywater130_demo
