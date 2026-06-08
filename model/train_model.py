@@ -17,7 +17,7 @@ dropout = 0.1
 crit_weight=5.0
 
 lr = 1e-3
-n_epochs = 300
+n_epochs = 400
 eval_iter = 4
 n_eval_batches = 4
 val_split = 0.8
